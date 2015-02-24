@@ -6,16 +6,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Reader
+public abstract class Reader
 {
-	private static BufferedReader cin;
-
 	public static ArrayList<String> readLog(String path)
 	{
 		ArrayList<String> text = new ArrayList<String>();
 		try
 		{
-			cin = new BufferedReader(new FileReader(path));
+			BufferedReader cin = new BufferedReader(new FileReader(path));
 			String line;
 			while ((line = cin.readLine()) != null)
 			{
