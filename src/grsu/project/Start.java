@@ -7,13 +7,20 @@ public class Start
 {
 	public static void main(String[] args)
 	{
-		List<String> text = new ArrayList<String>();
-		text = Reader.readLog(args[0] + " " + args[1]);
-		for (int i = Integer.parseInt(args[2]); i < text.size()
-				&& i < Integer.parseInt(args[3]); i++)
+		if (InputData.CheckInputData(args))
 		{
-			System.out.println(text.get(i));
+			InputData input = new InputData(args);
+			List<String> text = new ArrayList<String>();
+			text = Reader.readLog(input.getPathToFile());
+			for (int i = input.getStartLine(); i < text.size()
+					&& i < input.getLinesToWrite() + input.getStartLine(); i++)
+			{
+				System.out.println(text.get(i));
+			}
 		}
-		System.out.println(text.size());
+		else
+		{
+			System.out.println("Check input Data");
+		}
 	}
 }
