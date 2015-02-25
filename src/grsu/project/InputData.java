@@ -15,10 +15,9 @@ public class InputData
 		}
 		catch (NumberFormatException e)
 		{
-			System.out.println("Check the numbers in input");
 			e.printStackTrace();
 		}
-		this.pathToFile = args[0] + " " + args[1];//Path to log consist of two parts. May be changed.
+		this.pathToFile = args[0] + " " + args[1];
 	}
 	public static boolean CheckInputData(String[] args)
 	{
