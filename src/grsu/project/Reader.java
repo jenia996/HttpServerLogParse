@@ -8,13 +8,13 @@ import java.util.ArrayList;
 
 public abstract class Reader
 {
-	public static ArrayList<String> readLog(String path)
+	public static ArrayList<String> readFileToList(String path)
 	{
 		ArrayList<String> text = new ArrayList<String>();
 		try
 		{
-			BufferedReader cin = new BufferedReader(new FileReader(path));
 			String line;
+			BufferedReader cin = new BufferedReader(new FileReader(path));
 			while ((line = cin.readLine()) != null)
 			{
 				text.add(line);
