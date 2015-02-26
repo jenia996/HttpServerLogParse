@@ -1,41 +1,35 @@
 package grsu.project;
 
-public class InputData
-{
+public class InputData {
 	private int startLine;
 	private int linesToWrite;
-	private String pathToFile;
+	private String filePath;
 
-	public InputData(String[] args)
-	{
-		try
-		{
-			this.startLine = Integer.parseInt(args[2]);
-			this.linesToWrite = Integer.parseInt(args[3]);
+	public InputData(String[] args) throws ArrayIndexOutOfBoundsException,
+			NumberFormatException {
+		try {
+			this.filePath = args[0];
+			this.startLine = Integer.parseInt(args[1]);
+			this.linesToWrite = Integer.parseInt(args[2]);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.out.println("Check the array of input parameters.");
+		} catch (NumberFormatException e) {
+			System.out
+					.println("Check the numbers in array of input parameters");
 		}
-		catch (NumberFormatException e)
-		{
-			System.out.println("Check the numbers in input");
-			e.printStackTrace();
-		}
-		this.pathToFile = args[0] + " " + args[1];//Path to log consist of two parts. May be changed.
+
 	}
-	public static boolean CheckInputData(String[] args)
-	{
-		if (args.length > 3)
-			return true;
-		return false;
-	}
-	public int getStartLine()
-	{
+
+	public int getStartLine() {
 		return startLine;
 	}
-	public int getLinesToWrite()
-	{
+
+	public int getLinesToWrite() {
 		return linesToWrite;
 	}
-	public String getPathToFile()
-	{
-		return pathToFile;
+
+	public String getFilePath() {
+		return filePath;
 	}
+
 }
