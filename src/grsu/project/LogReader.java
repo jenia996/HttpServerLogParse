@@ -44,9 +44,9 @@ public abstract class LogReader {
 				if (readedLines == input.getStartLine()) {
 					int writedLines = 0;
 					while (in.ready() && writedLines < input.getLinesToWrite()) {
-						LogRecord logRecord = new LogRecord(in.readLine());
+						LogRecord logRecord = new LogRecord(in.readLine(),in.getLineNumber());
 						logRecords.add(logRecord);
-						writedLines++;
+						writedLines++;	
 					}
 					break;
 				}
