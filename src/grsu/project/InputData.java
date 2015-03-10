@@ -5,19 +5,10 @@ public class InputData {
 	private int linesToWrite;
 	private String filePath;
 
-	public InputData(String[] args) throws ArrayIndexOutOfBoundsException,
-			NumberFormatException {
-		try {
-			this.filePath = args[0];
-			this.startLine = Integer.parseInt(args[1]);
-			this.linesToWrite = Integer.parseInt(args[2]);
-		} catch (ArrayIndexOutOfBoundsException e) {
-			System.out.println("Check the array of input parameters.");
-		} catch (NumberFormatException e) {
-			System.out
-					.println("Check the numbers in array of input parameters");
-		}
-
+	public InputData(String filePath, int startLine, int linesToWrite) {
+		this.filePath = filePath;
+		this.startLine = startLine;
+		this.linesToWrite = linesToWrite;
 	}
 
 	public int getStartLine() {

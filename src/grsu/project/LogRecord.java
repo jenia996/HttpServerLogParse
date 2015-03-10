@@ -7,18 +7,59 @@ public class LogRecord {
 	private String replyCode;
 	private String replyBytes;
 
-	public LogRecord(String logLine, int lineNumber) {
-		LogPattern logPattern = LogPattern.getInstance();
-		this.host = logPattern.DetermineHost(logLine, lineNumber);
-		this.timestamp = logPattern.DetermineTimestamp(logLine, lineNumber);
-		this.request = logPattern.DetermineRequest(logLine, lineNumber);
-		this.replyCode = logPattern.DetermineReplyCode(logLine, lineNumber);
-		this.replyBytes = logPattern.DetermineReplyBytes(logLine, lineNumber);
+	public LogRecord(String host, String timestamp, String request,
+			String replyCode, String replyBytes) {
+		this.host = host;
+		this.timestamp = timestamp;
+		this.request = request;
+		this.replyCode = replyCode;
+		this.replyBytes = replyBytes;
 	}
 
 	@Override
 	public String toString() {
-		return host + " - - [" + timestamp + "]+ \"" + request + "\" "
+		return host + " - - [" + timestamp + "] \"" + request + "\" "
 				+ replyCode + " " + replyBytes;
 	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public String getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public String getRequest() {
+		return request;
+	}
+
+	public void setRequest(String request) {
+		this.request = request;
+	}
+
+	public String getReplyCode() {
+		return replyCode;
+	}
+
+	public void setReplyCode(String replyCode) {
+		this.replyCode = replyCode;
+	}
+
+	public String getReplyBytes() {
+		return replyBytes;
+	}
+
+	public void setReplyBytes(String replyBytes) {
+		this.replyBytes = replyBytes;
+	}
+
 }
