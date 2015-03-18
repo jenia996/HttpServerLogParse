@@ -7,15 +7,6 @@ public class LogRecord {
 	private String replyCode;
 	private String replyBytes;
 
-	public LogRecord(String host, String timestamp, String request,
-			String replyCode, String replyBytes) {
-		this.host = host;
-		this.timestamp = timestamp;
-		this.request = request;
-		this.replyCode = replyCode;
-		this.replyBytes = replyBytes;
-	}
-
 	@Override
 	public String toString() {
 		return host + " - - [" + timestamp + "] \"" + request + "\" "
