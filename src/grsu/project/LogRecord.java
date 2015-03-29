@@ -1,31 +1,36 @@
 package grsu.project;
 
+import java.util.Date;
+
 public class LogRecord {
-	private String host;
-	private String timestamp;
+	private HostField host;
+	private Date timestamp;
 	private String request;
-	private String replyCode;
+	private HttpMethod httpMethod;
+	private int replyCode;
+	private String httpVersion;
 	private String replyBytes;
 
 	@Override
 	public String toString() {
-		return host + " - - [" + timestamp + "] \"" + request + "\" "
+		return host.toString() + " - - [" + timestamp + "] \"" + httpMethod
+				+ " " + request + " " + "HTTP/" + httpVersion + "\" "
 				+ replyCode + " " + replyBytes;
 	}
 
-	public String getHost() {
+	public HostField getHost() {
 		return host;
 	}
 
-	public void setHost(String host) {
+	public void setHost(HostField host) {
 		this.host = host;
 	}
 
-	public String getTimestamp() {
+	public Date getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(String timestamp) {
+	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
 
@@ -37,20 +42,36 @@ public class LogRecord {
 		this.request = request;
 	}
 
-	public String getReplyCode() {
-		return replyCode;
-	}
-
-	public void setReplyCode(String replyCode) {
-		this.replyCode = replyCode;
-	}
-
 	public String getReplyBytes() {
 		return replyBytes;
 	}
 
 	public void setReplyBytes(String replyBytes) {
 		this.replyBytes = replyBytes;
+	}
+
+	public HttpMethod getHttpMethod() {
+		return httpMethod;
+	}
+
+	public void setHttpMethod(HttpMethod httpMethod) {
+		this.httpMethod = httpMethod;
+	}
+
+	public int getReplyCode() {
+		return replyCode;
+	}
+
+	public void setReplyCode(int replyCode) {
+		this.replyCode = replyCode;
+	}
+
+	public String getHttpVersion() {
+		return httpVersion;
+	}
+
+	public void setHttpVersion(String httpVersion) {
+		this.httpVersion = httpVersion;
 	}
 
 }
