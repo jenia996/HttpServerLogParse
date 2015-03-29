@@ -3,6 +3,7 @@ package grsu.project;
 public class LogRecordParser {
 
 	public static final String splitPattern = " - - \\[|\\] \"|\" | (?=\\d+$)| (?=-$)";
+	public static TimestampParser timestampParser = new TimestampParser();
 
 	/*
 	 * Configuration for logRecord { %H - all hosts, %Hi - host represented by
@@ -14,7 +15,7 @@ public class LogRecordParser {
 		LogRecord logRecord = new LogRecord();
 		try {
 			logRecord.setHost(HostFieldParser.parse(tokens[0]));
-			logRecord.setTimestamp(TimestampParser.parse(tokens[1]));
+			logRecord.setTimestamp(timestampParser.parse(tokens[1]));
 			logRecord = fillRequest(logRecord, tokens[2]);
 			logRecord.setReplyCode(Integer.parseInt(tokens[3]));
 			logRecord.setReplyBytes(tokens[4]);
@@ -30,7 +31,11 @@ public class LogRecordParser {
 
 	private static LogRecord fillRequest(LogRecord logRecord, String request) {
 		String[] tokens = request.split(" ");
-		logRecord.setHttpMethod(HttpMethodParser.parse(tokens[0]));
+		try {
+			logRecord.setHttpMethod(HttpMethodParser.parse(tokens[0]));
+		} catch (IllegalArgumentException e) {
+			System.out.println("Invalid HTTP Method");
+		}
 		logRecord.setRequest(tokens[1]);
 		logRecord.setHttpVersion(tokens[2].split("/")[1]);
 		return logRecord;

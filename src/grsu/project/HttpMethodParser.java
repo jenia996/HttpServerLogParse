@@ -1,6 +1,6 @@
 package grsu.project;
 
-public class HttpMethodParser {
+abstract public class HttpMethodParser {
 
 	public static  HttpMethod parse(String httpMethod)
 	{

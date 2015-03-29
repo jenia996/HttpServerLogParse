@@ -23,7 +23,7 @@ public class LogFileAnalizer {
 										.getLinesToWrite()) {
 							LogRecord logRecord = LogRecordParser
 									.parse(line);
-							System.out.println(logRecord.toString());
+							System.out.println(LogRecordWriter.toString(logRecord));
 							
 						}
 						break;

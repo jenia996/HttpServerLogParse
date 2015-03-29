@@ -11,13 +11,11 @@ public class LogRecord {
 	private String httpVersion;
 	private String replyBytes;
 
-	@Override
-	public String toString() {
-		return host.toString() + " - - [" + timestamp + "] \"" + httpMethod
-				+ " " + request + " " + "HTTP/" + httpVersion + "\" "
-				+ replyCode + " " + replyBytes;
-	}
-
+	/*
+	 * @Override public String toString() { return host.toString() + " - - [" +
+	 * timestamp + "] \"" + httpMethod + " " + request + " " + "HTTP/" +
+	 * httpVersion + "\" " + replyCode + " " + replyBytes; }
+	 */
 	public HostField getHost() {
 		return host;
 	}
