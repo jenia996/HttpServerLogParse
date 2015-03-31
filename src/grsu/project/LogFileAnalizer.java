@@ -21,16 +21,17 @@ public class LogFileAnalizer {
 						while ((line = reader.readLine()) != null
 								&& reader.getLineNumber() < params
 										.getLinesToWrite()) {
-							LogRecord logRecord = LogRecordParser
-									.parse(line);
-							System.out.println(LogRecordWriter.toString(logRecord));
-							
+							LogRecord logRecord = LogRecordParser.parse(line);
+							System.out.println(LogRecordWriter
+									.logRecordToString(logRecord));
 						}
 						break;
 					}
+
 					reader.readLine();
 				}
 				reader.close();
+				System.out.println(LogRecordParser.getTimestampFormat());
 				System.out.println("Ended");
 
 			} else {

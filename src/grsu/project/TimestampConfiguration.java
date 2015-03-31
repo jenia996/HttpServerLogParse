@@ -2,25 +2,42 @@ package grsu.project;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class TimestampConfiguration {
 
-	private DateFormat formatter;
+	private DateFormat timestampFormat;
 
 	public TimestampConfiguration() {
-		formatter = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss ZZ");
+		timestampFormat = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss ZZ");
 	}
 
 	public void setTimestampFormat(String timestampFormat) {
-		formatter = new SimpleDateFormat(timestampFormat);
+		if (checkTimestampFormat(timestampFormat)) {
+			this.timestampFormat = new SimpleDateFormat(timestampFormat);
+		}
+	}
+
+	private Boolean checkTimestampFormat(String timestampFormat) {
+		try {
+			@SuppressWarnings("unused")
+			DateFormat temp = new SimpleDateFormat(timestampFormat);
+			return true;
+		} catch (IllegalArgumentException e) {
+			System.out.println("Invalid Format");
+			return false;
+		}
 	}
 
 	public DateFormat getTimestampFormat() {
-		return formatter;
+		return timestampFormat;
 	}
 
-	public String getTimestampFormatString() {
-		return formatter.toString();
+	@Override
+	public String toString() {
+		Date thisDate = new Date();
+		return timestampFormat.format(thisDate);
+
 	}
 
 }

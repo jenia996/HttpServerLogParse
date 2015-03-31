@@ -3,7 +3,8 @@ package grsu.project;
 public class HostField {
 	private String host;
 	private String hostIP;
-//	private byte[] hostIP;
+
+	// private byte[] hostIP;
 	public String getHost() {
 		return host;
 	}
@@ -23,16 +24,13 @@ public class HostField {
 	@Override
 	public String toString() {
 		StringBuilder toString = new StringBuilder();
-		if(host != null)
-		{
+		if (host != null) {
 			toString.append(host + " ");
 		}
-		if(hostIP != null)
-		{
+		if (hostIP != null) {
 			toString.append(hostIP + " ");
 		}
 		return toString.toString();
 	}
-	
 
 }

@@ -4,7 +4,7 @@ abstract public class LogRecordWriter {
 
 	private static TimestampConfiguration timestampConfiguration = new TimestampConfiguration();
 
-	public static String toString(LogRecord logRecord) {
+	public static String logRecordToString(LogRecord logRecord) {
 		try {
 			StringBuilder toString = new StringBuilder();
 			toString.append(logRecord.getHost().toString() + " - - ");

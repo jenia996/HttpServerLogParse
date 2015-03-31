@@ -6,13 +6,13 @@ import java.util.Date;
 
 public class TimestampParser {
 
-	private static TimestampConfiguration format = new TimestampConfiguration();
+	private static TimestampConfiguration timestampConfiguration = new TimestampConfiguration();
 
 	public Date parse(String timestamp) {
 
 		Date date;
 		try {
-			date = format.getTimestampFormat().parse(timestamp);
+			date = timestampConfiguration.getTimestampFormat().parse(timestamp);
 		} catch (ParseException e) {
 			System.out.println("Invalid Timestamp format.");
 			return null;
@@ -21,15 +21,15 @@ public class TimestampParser {
 	}
 
 	public void setTimestampFormat(String format) {
-		TimestampParser.format.setTimestampFormat(format);
+		TimestampParser.timestampConfiguration.setTimestampFormat(format);
 	}
 
-	public String getFormatString() {
-		return format.getTimestampFormatString();
+	public DateFormat getTimestampFormat() {
+		return timestampConfiguration.getTimestampFormat();
 	}
 
-	public DateFormat getFormat() {
-		return format.getTimestampFormat();
+	public String getTimestampFormatString() {
+		return timestampConfiguration.toString();
 	}
 
 }

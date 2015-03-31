@@ -2,8 +2,8 @@ package grsu.project;
 
 public class LogRecordParser {
 
-	public static final String splitPattern = " - - \\[|\\] \"|\" | (?=\\d+$)| (?=-$)";
-	public static TimestampParser timestampParser = new TimestampParser();
+	private static final String splitPattern = " - - \\[|\\] \"|\" | (?=\\d+$)| (?=-$)";
+	private static TimestampParser timestampParser = new TimestampParser();
 
 	/*
 	 * Configuration for logRecord { %H - all hosts, %Hi - host represented by
@@ -40,5 +40,14 @@ public class LogRecordParser {
 		logRecord.setHttpVersion(tokens[2].split("/")[1]);
 		return logRecord;
 	}
+
+	public static String getTimestampFormat() {
+		return timestampParser.getTimestampFormatString();
+	}
+	public static void setTimestampFormat(String timestampFormat)
+	{
+		timestampParser.setTimestampFormat(timestampFormat);
+	}
+	
 
 }
