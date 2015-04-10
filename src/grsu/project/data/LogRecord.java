@@ -1,4 +1,4 @@
-package grsu.project;
+package grsu.project.data;
 
 import java.util.Date;
 
@@ -9,13 +9,8 @@ public class LogRecord {
 	private HttpMethod httpMethod;
 	private int replyCode;
 	private String httpVersion;
-	private String replyBytes;
+	private int replyBytes;
 
-	/*
-	 * @Override public String toString() { return host.toString() + " - - [" +
-	 * timestamp + "] \"" + httpMethod + " " + request + " " + "HTTP/" +
-	 * httpVersion + "\" " + replyCode + " " + replyBytes; }
-	 */
 	public HostField getHost() {
 		return host;
 	}
@@ -40,11 +35,11 @@ public class LogRecord {
 		this.request = request;
 	}
 
-	public String getReplyBytes() {
+	public int getReplyBytes() {
 		return replyBytes;
 	}
 
-	public void setReplyBytes(String replyBytes) {
+	public void setReplyBytes(int replyBytes) {
 		this.replyBytes = replyBytes;
 	}
 

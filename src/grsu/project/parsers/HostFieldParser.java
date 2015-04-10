@@ -1,4 +1,6 @@
-package grsu.project;
+package grsu.project.parsers;
+
+import grsu.project.data.HostField;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

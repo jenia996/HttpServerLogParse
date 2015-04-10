@@ -1,5 +1,8 @@
 package grsu.project;
 
+import grsu.project.data.*;
+import grsu.project.data.LogRecord;
+
 abstract public class LogRecordWriter {
 
 	private static TimestampConfiguration timestampConfiguration = new TimestampConfiguration();

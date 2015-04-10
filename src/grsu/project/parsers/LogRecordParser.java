@@ -1,4 +1,6 @@
-package grsu.project;
+package grsu.project.parsers;
+
+import grsu.project.data.LogRecord;
 
 public class LogRecordParser {
 
@@ -18,7 +20,7 @@ public class LogRecordParser {
 			logRecord.setTimestamp(timestampParser.parse(tokens[1]));
 			logRecord = fillRequest(logRecord, tokens[2]);
 			logRecord.setReplyCode(Integer.parseInt(tokens[3]));
-			logRecord.setReplyBytes(tokens[4]);
+			logRecord.setReplyBytes(getReplyBytes(tokens[4]));
 			return logRecord;
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return null;
@@ -27,6 +29,13 @@ public class LogRecordParser {
 			return null;
 		}
 
+	}
+
+	private static int getReplyBytes(String replyBytes) {
+		if (replyBytes.equals("-")) {
+			return 0;
+		}
+		return Integer.parseInt(replyBytes);
 	}
 
 	private static LogRecord fillRequest(LogRecord logRecord, String request) {
@@ -44,10 +53,9 @@ public class LogRecordParser {
 	public static String getTimestampFormat() {
 		return timestampParser.getTimestampFormatString();
 	}
-	public static void setTimestampFormat(String timestampFormat)
-	{
+
+	public static void setTimestampFormat(String timestampFormat) {
 		timestampParser.setTimestampFormat(timestampFormat);
 	}
-	
 
 }

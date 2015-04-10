@@ -1,15 +1,19 @@
-package grsu.project;
+package grsu.project.data;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class TimestampConfiguration {
 
 	private DateFormat timestampFormat;
+	private Locale locale;
 
 	public TimestampConfiguration() {
-		timestampFormat = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss ZZ");
+		locale = Locale.ENGLISH;
+		timestampFormat = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss ZZ",
+				locale);
 	}
 
 	public void setTimestampFormat(String timestampFormat) {

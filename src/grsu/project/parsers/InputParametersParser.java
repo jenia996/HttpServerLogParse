@@ -1,7 +1,10 @@
-package grsu.project;
+package grsu.project.parsers;
+
+import grsu.project.data.InputParameters;
 
 public abstract class InputParametersParser {
-	public static InputParameters parse(String filePath,String startLine,String linesToWrite) {
+	public static InputParameters parse(String filePath, String startLine,
+			String linesToWrite) {
 		InputParameters params = new InputParameters();
 		try {
 			params.setFilePath(filePath);

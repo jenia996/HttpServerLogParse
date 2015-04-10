@@ -1,4 +1,4 @@
-package grsu.project;
+package grsu.project.data;
 
 public class HostField {
 	private String host;

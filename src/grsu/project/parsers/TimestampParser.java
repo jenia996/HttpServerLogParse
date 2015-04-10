@@ -1,6 +1,7 @@
-package grsu.project;
+package grsu.project.parsers;
 
 import java.text.DateFormat;
+import grsu.project.data.*;
 import java.text.ParseException;
 import java.util.Date;
 
@@ -14,7 +15,9 @@ public class TimestampParser {
 		try {
 			date = timestampConfiguration.getTimestampFormat().parse(timestamp);
 		} catch (ParseException e) {
-			System.out.println("Invalid Timestamp format.");
+			if (!timestamp.endsWith("")) {
+				System.out.println("Invalid Timestamp format.");
+			}
 			return null;
 		}
 		return date;
