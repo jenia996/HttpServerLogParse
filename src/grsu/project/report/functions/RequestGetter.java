@@ -3,8 +3,8 @@ package grsu.project.report.functions;
 import grsu.project.data.LogRecord;
 import grsu.project.report.Visitor;
 
-public class RequestGetter extends AbstractTypeKey implements
-		Function<RequestGetter> {
+public class RequestGetter extends AbstractGetter implements
+		ReportFunction<RequestGetter> {
 
 	private String requestKey;
 

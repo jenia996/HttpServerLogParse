@@ -2,9 +2,11 @@ package grsu.project.parsers;
 
 import grsu.project.data.LogRecord;
 
+import java.io.IOException;
+
 public class LogRecordParser {
 
-	private static final String splitPattern = " - - \\[|\\] \"|\" | (?=\\d+$)| (?=-$)";
+	private static final String splitPattern = " - - \\[|\\] \"|\" (?=\\d)| (?=\\d+$)| (?=-$)";
 	private static TimestampParser timestampParser = new TimestampParser();
 
 	/*
@@ -12,7 +14,7 @@ public class LogRecordParser {
 	 * ip, %Hw all hosts without ip hosts %T - Time %Rq - request %Rs - all
 	 * response, %RsC - response code, %RsB - response bytes }
 	 */
-	public static LogRecord parse(String line) {
+	public static LogRecord parse(String line) throws IOException {
 		String[] tokens = line.split(splitPattern);
 		LogRecord logRecord = new LogRecord();
 		try {
@@ -25,7 +27,6 @@ public class LogRecordParser {
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return null;
 		} catch (NumberFormatException e) {
-			System.out.println("Error while parsing reply code");
 			return null;
 		}
 
@@ -38,15 +39,18 @@ public class LogRecordParser {
 		return Integer.parseInt(replyBytes);
 	}
 
-	private static LogRecord fillRequest(LogRecord logRecord, String request) {
-		String[] tokens = request.split(" ");
+	private static LogRecord fillRequest(LogRecord logRecord, String request)
+			throws IOException {
+		String[] tokens = request.split("[ ]+");
 		try {
 			logRecord.setHttpMethod(HttpMethodParser.parse(tokens[0]));
 		} catch (IllegalArgumentException e) {
 			System.out.println("Invalid HTTP Method");
 		}
 		logRecord.setRequest(tokens[1]);
+
 		logRecord.setHttpVersion(tokens[2].split("/")[1]);
+
 		return logRecord;
 	}
 

@@ -4,8 +4,8 @@ import grsu.project.data.HttpMethod;
 import grsu.project.data.LogRecord;
 import grsu.project.report.Visitor;
 
-public class HttpMethodGetter extends AbstractTypeKey implements
-		Function<HttpMethodGetter> {
+public class HttpMethodGetter extends AbstractGetter implements
+		ReportFunction<HttpMethodGetter> {
 	private HttpMethod method;
 
 	public HttpMethod getMethod() {

@@ -1,4 +1,4 @@
-package grsu.project;
+package grsu.project.report;
 
 import grsu.project.data.LogRecord;
 

@@ -3,8 +3,8 @@ package grsu.project.report.functions;
 import grsu.project.data.LogRecord;
 import grsu.project.report.Visitor;
 
-public class TransferedBytesGetter extends AbstractTypeKey implements
-		Function<TransferedBytesGetter> {
+public class TransferedBytesGetter extends AbstractGetter implements
+		ReportFunction<TransferedBytesGetter> {
 	private long count;
 
 	public long getCount() {

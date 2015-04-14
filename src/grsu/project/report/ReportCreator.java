@@ -1,11 +1,11 @@
 package grsu.project.report;
 
-import grsu.project.DateChecker;
+import grsu.project.Buffer;
 import grsu.project.data.InputParameters;
 import grsu.project.data.LogRecord;
 import grsu.project.parsers.LogRecordParser;
-import grsu.project.report.functions.AbstractTypeKey;
-import grsu.project.report.functions.Function;
+import grsu.project.report.functions.AbstractGetter;
+import grsu.project.report.functions.ReportFunction;
 import grsu.project.report.functions.HttpMethodGetter;
 import grsu.project.report.functions.RequestGetter;
 import grsu.project.report.functions.TransferedBytesGetter;
@@ -17,58 +17,83 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ReportCreator<T extends AbstractTypeKey> {
+public class ReportCreator<T extends AbstractGetter> {
 
 	@SuppressWarnings("unchecked")
-	private static <T extends AbstractTypeKey> T cast(final Object object) {
+	private static <T extends AbstractGetter> T cast(final Object object) {
 		return (T) object;
 	}
+
+	private static Buffer buffer;
+	Date t = new Date();
 
 	@SuppressWarnings({ "rawtypes" })
 	public Report createReport(Date startDate, Date endDate,
 			List<Integer> functionsNumbers, InputParameters parameters)
-			throws IOException {
+			throws IOException, InterruptedException {
 		Report report = new Report();
-		List<Function> functions = checkFunctions(functionsNumbers);
-		LineNumberReader reader = new LineNumberReader(new FileReader(
-				parameters.getFilePath()));
 		Visitor visitor = report;
-		while (reader.ready()) {
-			LogRecord logRecord = LogRecordParser.parse(reader.readLine());
-			if (DateChecker.checkDate(startDate, endDate, logRecord)) {
-				while (reader.ready()
-						&& DateChecker.checkDate(startDate, endDate, logRecord)) {
-					if (logRecord != null) {
-						for (Function<?> x : functions) {
-							T t = cast(x.create(logRecord));
-							t.accept(visitor);
+		buffer = new Buffer();
+		buffer.setReader(new LineNumberReader(new FileReader(parameters
+				.getFilePath())));
+		buffer.setBufferSize(4000);
+		buffer.start();
+		List<ReportFunction> functions = checkFunctions(functionsNumbers);
+		do {
+			if (!buffer.isEmpty()) {
+
+				LogRecord logRecord = LogRecordParser.parse(buffer.getLine());
+				if (DateChecker.checkDate(startDate, endDate, logRecord)) {
+
+					while (DateChecker.checkDate(startDate, endDate, logRecord)) {
+						if (logRecord != null) {
+							for (ReportFunction<?> x : functions) {
+								T t = cast(x.create(logRecord));
+								t.accept(visitor);
+							}
 						}
+						if (!buffer.isEmpty()) {
+							logRecord = LogRecordParser.parse(buffer.getLine());
+						} else {
+							if (buffer.isFullRead()) {
+								buffer.finish();
+								break;
+							} else {
+								Thread.sleep(10);
+							}
+
+						}
+
 					}
-					logRecord = LogRecordParser.parse(reader.readLine());
+					buffer.finish();
+					break;
 				}
-				break;
+
+			} else {
+			//	System.out.println("Main Sleep");
+				Thread.sleep(10);
 			}
-		}
-		reader.close();
+
+		} while (true);
 		return report;
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	private List<Function> checkFunctions(List<Integer> functionsNumbers) {
-		List<Function> functions = new ArrayList<>();
+	private List<ReportFunction> checkFunctions(List<Integer> functionsNumbers) {
+		List<ReportFunction> functions = new ArrayList<>();
 		if (functionsNumbers.contains(1)) {
 			RequestGetter requsetgetter = new RequestGetter();
-			Function<RequestGetter> function = requsetgetter::create;
+			ReportFunction<RequestGetter> function = requsetgetter::create;
 			functions.add(function);
 		}
 		if (functionsNumbers.contains(2)) {
 			HttpMethodGetter httpGetter = new HttpMethodGetter();
-			Function<HttpMethodGetter> function = httpGetter::create;
+			ReportFunction<HttpMethodGetter> function = httpGetter::create;
 			functions.add(function);
 		}
 		if (functionsNumbers.contains(3)) {
 			TransferedBytesGetter transferefBytesGetter = new TransferedBytesGetter();
-			Function<TransferedBytesGetter> function = transferefBytesGetter::create;
+			ReportFunction<TransferedBytesGetter> function = transferefBytesGetter::create;
 			functions.add(function);
 		}
 		return functions;
