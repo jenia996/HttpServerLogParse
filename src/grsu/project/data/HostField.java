@@ -4,7 +4,6 @@ public class HostField {
 	private String host;
 	private String hostIP;
 
-	// private byte[] hostIP;
 	public String getHost() {
 		return host;
 	}

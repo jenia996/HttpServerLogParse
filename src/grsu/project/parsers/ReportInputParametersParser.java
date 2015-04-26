@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 public class ReportInputParametersParser {
 	private static TimestampParser timestampParser = new TimestampParser();
-
+	final static Logger logger = Logger.getLogger(ReportInputParametersParser.class);
 	public static ReportInputParameters inputParams() {
 		BufferedReader input = new BufferedReader(new InputStreamReader(
 				System.in));
@@ -45,6 +47,7 @@ public class ReportInputParametersParser {
 					tempListFunctions.add(Integer.parseInt(param));
 				}
 			} catch (NumberFormatException e) {
+				logger.error("Invalid function params");
 				return null;
 			}
 			params.setParams(tempListFunctions);

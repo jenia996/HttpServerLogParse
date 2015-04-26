@@ -3,8 +3,7 @@ package grsu.project;
 import grsu.project.data.InputParameters;
 import grsu.project.parsers.InputParametersParser;
 import grsu.project.parsers.ReportInputParametersParser;
-import grsu.project.report.Report;
-import grsu.project.report.ReportCreator;
+import grsu.project.report.ReportGenerator;
 import grsu.project.report.ReportInputParameters;
 import grsu.project.report.ReportWriter;
 
@@ -13,6 +12,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.apache.log4j.PropertyConfigurator;
+
 public class LogFileAnalizer {
 	@FunctionalInterface
 	interface Converter<F, T> {
@@ -20,6 +21,7 @@ public class LogFileAnalizer {
 	}
 
 	public static void main(String[] args) throws InterruptedException {
+		PropertyConfigurator.configure("log4j.properties");
 		try {
 			InputParameters params = InputParametersParser.parse(args[0],
 					args[1], args[2]);
@@ -35,14 +37,9 @@ public class LogFileAnalizer {
 								.println("Do you want to continue with this params (Y,N)?");
 						String agree = input.readLine().toLowerCase();
 						if (agree.equals("y")) {
-							@SuppressWarnings("rawtypes")
-							ReportCreator creator = new ReportCreator();
-							@SuppressWarnings("unchecked")
-							Report report = creator.createReport(
-									parameters.getStartDate(),
-									parameters.getEndDate(),
-									parameters.getParams(), params);
-							ReportWriter.writeReportInfo(report, parameters);
+							ReportGenerator generator = new ReportGenerator();
+							ReportWriter.writeReportInfo(generator
+									.generateReport(parameters, params));
 						}
 					}
 				} while (true);

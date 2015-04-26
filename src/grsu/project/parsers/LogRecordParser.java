@@ -1,35 +1,71 @@
 package grsu.project.parsers;
 
+import grsu.project.HttpVersionException;
 import grsu.project.data.LogRecord;
 
-import java.io.IOException;
+import java.util.StringTokenizer;
+
+import org.apache.log4j.Logger;
 
 public class LogRecordParser {
 
-	private static final String splitPattern = " - - \\[|\\] \"|\" (?=\\d)| (?=\\d+$)| (?=-$)";
+	private static final String splitPattern = "\\[|\\]";
 	private static TimestampParser timestampParser = new TimestampParser();
+	final static Logger logger = Logger.getLogger(LogRecordParser.class);
 
-	/*
-	 * Configuration for logRecord { %H - all hosts, %Hi - host represented by
-	 * ip, %Hw all hosts without ip hosts %T - Time %Rq - request %Rs - all
-	 * response, %RsC - response code, %RsB - response bytes }
-	 */
-	public static LogRecord parse(String line) throws IOException {
+	public static LogRecord parse(String line) {
 		String[] tokens = line.split(splitPattern);
 		LogRecord logRecord = new LogRecord();
+		int requestStartIndex, requestEndIndex;
 		try {
-			logRecord.setHost(HostFieldParser.parse(tokens[0]));
+			logRecord.setHost(HostFieldParser.parse(tokens[0].substring(0,
+					tokens[0].indexOf(" "))));
 			logRecord.setTimestamp(timestampParser.parse(tokens[1]));
-			logRecord = fillRequest(logRecord, tokens[2]);
-			logRecord.setReplyCode(Integer.parseInt(tokens[3]));
-			logRecord.setReplyBytes(getReplyBytes(tokens[4]));
-			return logRecord;
+			requestStartIndex = tokens[2].indexOf("\"") + 1;
+			requestEndIndex = tokens[2].lastIndexOf("\"");
+			fillRequestData(logRecord, tokens[2].substring(requestEndIndex));
+			fillRequest(logRecord,
+					tokens[2].substring(requestStartIndex, requestEndIndex));
 		} catch (ArrayIndexOutOfBoundsException e) {
+			logger.error("Error while parsing " + line);
 			return null;
 		} catch (NumberFormatException e) {
+			logger.error("Error while parsing requestData " + line);
+			return null;
+		} catch (IllegalArgumentException e) {
+			logger.error("Error while parsing HttpMethod" + line);
+			return null;
+		} catch (HttpVersionException e) {
+			logger.warn("Missing HTTP Version " + line);
+			logRecord.setHttpVersion("1.0");
+			return logRecord;
+		} catch (IndexOutOfBoundsException e) {
+			logger.error("Error while parsing " + line);
 			return null;
 		}
+		return logRecord;
+	}
 
+	private static LogRecord fillRequestData(LogRecord logRecord,
+			String requestData) {
+		StringTokenizer tokens = new StringTokenizer(requestData, "\" ");
+		logRecord.setReplyCode(Integer.parseInt(tokens.nextToken()));
+		logRecord.setReplyBytes(getReplyBytes(tokens.nextToken()));
+		return logRecord;
+	}
+
+	private static LogRecord fillRequest(LogRecord logRecord, String request)
+			throws HttpVersionException {
+		String[] tokens = request.split(" |\"");
+		logRecord.setHttpMethod(HttpMethodParser.parse(tokens[0]));
+		logRecord.setRequest(tokens[1]);
+		try {
+			logRecord.setHttpVersion(HttpVersionParser.parse(tokens[2]));
+		} catch (ArrayIndexOutOfBoundsException e) {
+			throw new HttpVersionException(e);
+		}
+
+		return logRecord;
 	}
 
 	private static int getReplyBytes(String replyBytes) {
@@ -37,21 +73,6 @@ public class LogRecordParser {
 			return 0;
 		}
 		return Integer.parseInt(replyBytes);
-	}
-
-	private static LogRecord fillRequest(LogRecord logRecord, String request)
-			throws IOException {
-		String[] tokens = request.split("[ ]+");
-		try {
-			logRecord.setHttpMethod(HttpMethodParser.parse(tokens[0]));
-		} catch (IllegalArgumentException e) {
-			System.out.println("Invalid HTTP Method");
-		}
-		logRecord.setRequest(tokens[1]);
-
-		logRecord.setHttpVersion(tokens[2].split("/")[1]);
-
-		return logRecord;
 	}
 
 	public static String getTimestampFormat() {

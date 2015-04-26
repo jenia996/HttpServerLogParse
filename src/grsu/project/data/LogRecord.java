@@ -27,6 +27,14 @@ public class LogRecord {
 		this.timestamp = timestamp;
 	}
 
+	@Override
+	public String toString() {
+		return  host + " " + timestamp
+				+ " " +   " " + httpMethod
+				+ " " + replyCode + " " + httpVersion
+				+ " " + replyBytes;
+	}
+
 	public String getRequest() {
 		return request;
 	}
