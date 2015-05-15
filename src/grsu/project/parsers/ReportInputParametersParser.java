@@ -12,8 +12,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 public class ReportInputParametersParser {
-	private static TimestampParser timestampParser = new TimestampParser();
-	final static Logger logger = Logger.getLogger(ReportInputParametersParser.class);
+	final static Logger logger = Logger
+			.getLogger(ReportInputParametersParser.class);
+
 	public static ReportInputParameters inputParams() {
 		BufferedReader input = new BufferedReader(new InputStreamReader(
 				System.in));
@@ -34,8 +35,8 @@ public class ReportInputParametersParser {
 	private static ReportInputParameters parse(String startDate,
 			String endDate, String functionParams) {
 		ReportInputParameters params = new ReportInputParameters();
-		Date startDateTime = timestampParser.parse(startDate);
-		Date endDateTime = timestampParser.parse(endDate);
+		Date startDateTime = TimestampParser.parse(startDate);
+		Date endDateTime = TimestampParser.parse(endDate);
 		if (startDateTime == null || endDateTime == null
 				|| startDateTime.before(endDateTime)) {
 			params.setStartDate(startDateTime);

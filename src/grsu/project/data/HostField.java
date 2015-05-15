@@ -1,6 +1,7 @@
 package grsu.project.data;
 
 public class HostField {
+
 	private String host;
 	private String hostIP;
 

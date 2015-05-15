@@ -9,9 +9,8 @@ import grsu.project.data.LogRecord;
 import grsu.project.report.Report;
 
 public class RequestReport implements Report {
-	private Map<String, Integer> mostWanted = new HashMap<>();
+	private Map<String, Integer> mostWanted = new HashMap<String, Integer>();
 
-	@Override
 	public void addInfo(LogRecord logRecord) {
 		if (mostWanted.containsKey(logRecord.getRequest())) {
 			mostWanted.put(logRecord.getRequest(),
@@ -33,7 +32,6 @@ public class RequestReport implements Report {
 		return max;
 	}
 
-	@Override
 	public String writeInfo() {
 		Entry<String, Integer> max = getMostWantedRequest();
 		return max.getKey() + " " + max.getValue() + '\n';

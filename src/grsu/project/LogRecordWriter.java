@@ -1,7 +1,6 @@
 package grsu.project;
 
 import grsu.project.data.*;
-import grsu.project.data.LogRecord;
 
 abstract public class LogRecordWriter {
 
@@ -13,7 +12,7 @@ abstract public class LogRecordWriter {
 			toString.append(logRecord.getHost().toString() + " - - ");
 			toString.append("["
 					+ timestampConfiguration.getTimestampFormat().format(
-							logRecord.getTimestamp()) + "] ");
+							logRecord.getDate()) + "] ");
 			toString.append("\"" + logRecord.getHttpMethod() + " ");
 			toString.append(logRecord.getRequest() + " ");
 			toString.append("HTTP/" + logRecord.getHttpVersion() + "\" ");

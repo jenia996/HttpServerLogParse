@@ -14,7 +14,7 @@ public class TimestampParser {
 	private static TimestampConfiguration timestampConfiguration = new TimestampConfiguration();
 	final static Logger logger = Logger.getLogger(TimestampParser.class);
 
-	public Date parse(String timestamp) {
+	public static Date parse(String timestamp) {
 
 		Date date;
 		try {

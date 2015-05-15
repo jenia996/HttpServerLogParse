@@ -1,18 +1,15 @@
 package grsu.project.report;
 
+import grsu.project.SomeClassToWorkWithDataBase;
 import grsu.project.data.InputParameters;
 import grsu.project.data.LogRecord;
 import grsu.project.parsers.LogRecordParser;
 import grsu.project.reader.Monitor;
 import grsu.project.reader.Reader;
-import grsu.project.report.impl.factory.HttpMethodReportFactory;
-import grsu.project.report.impl.factory.RequestReportFactory;
-import grsu.project.report.impl.factory.SentBytesReportFactory;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,14 +29,16 @@ public class ReportGenerator {
 	}
 
 	public List<Report> generateReport(ReportInputParameters params,
-			InputParameters parameters) throws IOException {
+			InputParameters parameters, ReportList reportListCreator)
+			throws IOException {
 		reader = new Reader();
 		LineNumberReader fileReader = new LineNumberReader(new FileReader(
 				parameters.getFilePath()));
 		reader.setReader(fileReader);
 		reader.start();
-		waitForReader(5l);
-		List<Report> reports = fillReportList(params.getParams());
+		waitForReader(200l);
+		List<Report> reports = fillReportList(params.getParams(),
+				reportListCreator);
 		return generateReport(reports, params.getStartDate(),
 				params.getEndDate(), params.getParams());
 	}
@@ -47,7 +46,7 @@ public class ReportGenerator {
 	private List<Report> generateReport(List<Report> reports, Date startDate,
 			Date endDate, List<Integer> params) throws IOException {
 		Date t = new Date();
-		int i = 0;
+		SomeClassToWorkWithDataBase worker = new SomeClassToWorkWithDataBase();
 		do {
 			if (!reader.isEmpty()) {
 				LogRecord logRecord = LogRecordParser.parse(reader.getLine());
@@ -57,24 +56,22 @@ public class ReportGenerator {
 							for (Report x : reports) {
 								x.addInfo(logRecord);
 							}
-							i++;
+							worker.append(logRecord);
 						}
 						if (!reader.isEmpty()) {
 							logRecord = LogRecordParser.parse(reader.getLine());
 							if (reader.isWaiting() && reader.isAlmostEmpty()) {
-								synchronized (reader.getMonitor()) {
-									System.out
-											.println("Main thread Notify second thread " + i);
-									reader.getMonitor().notify();
-									reader.setWaiting(false);
-								}
+								notifyReader();
 							}
 						} else {
+							if (true) {
+								System.out.println();
+							}
 							if (reader.isFullRead()) {
 								reader.finish();
 								break;
 							} else {
-								System.out.println("Main sleep ");
+								waitReader();
 							}
 						}
 					}
@@ -82,14 +79,7 @@ public class ReportGenerator {
 					break;
 				}
 			} else {
-				monitor.setWaiting(true);
-				System.out.println("Main Sleep");
-				try {
-					monitor.wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				waitReader();
 			}
 
 		} while (true);
@@ -97,23 +87,33 @@ public class ReportGenerator {
 		return reports;
 	}
 
+	private void waitReader() {
+		synchronized (monitor) {
+			monitor.setWaiting(true);
+			try {
+				monitor.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void notifyReader() {
+		synchronized (reader.getMonitor()) {
+			reader.getMonitor().notify();
+			reader.setWaiting(false);
+		}
+	}
+
 	public static Monitor getMonitor() {
 		return monitor;
 	}
 
-	private List<Report> fillReportList(List<Integer> params) {
-		List<Report> reports = new ArrayList<Report>();
-		if (params.contains(1)) {
-			reports.add((new HttpMethodReportFactory()).createReport());
-		}
-		if (params.contains(2)) {
-			reports.add((new RequestReportFactory()).createReport());
-		}
-		if (params.contains(3)) {
-			reports.add((new SentBytesReportFactory()).createReport());
-		}
-
-		return reports;
+	private List<Report> fillReportList(List<Integer> params,
+			ReportList reportListCreator) {
+		List<Report> reportList = reportListCreator.createReportList(params);
+		return reportList;
 	}
 
 	public static boolean isWaiting() {

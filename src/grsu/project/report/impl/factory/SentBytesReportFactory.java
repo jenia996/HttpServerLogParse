@@ -7,7 +7,6 @@ import grsu.project.report.impl.report.SentBytesReport;
 
 public class SentBytesReportFactory implements ReportFactory {
 
-	@Override
 	public SentBytesReport createReport() {
 		return new SentBytesReport();
 	}

@@ -16,9 +16,9 @@ public class TimestampConfiguration {
 				locale);
 	}
 
-	public void setTimestampFormat(String timestampFormat) {
-		if (checkTimestampFormat(timestampFormat)) {
-			this.timestampFormat = new SimpleDateFormat(timestampFormat);
+	public void setTimestampFormat(String format) {
+		if (checkTimestampFormat(format)) {
+			timestampFormat = new SimpleDateFormat(format);
 		}
 	}
 

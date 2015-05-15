@@ -1,6 +1,5 @@
 package grsu.project.parsers;
 
-import grsu.project.HttpVersionException;
 import grsu.project.data.LogRecord;
 
 import java.util.StringTokenizer;
@@ -10,7 +9,6 @@ import org.apache.log4j.Logger;
 public class LogRecordParser {
 
 	private static final String splitPattern = "\\[|\\]";
-	private static TimestampParser timestampParser = new TimestampParser();
 	final static Logger logger = Logger.getLogger(LogRecordParser.class);
 
 	public static LogRecord parse(String line) {
@@ -18,29 +16,26 @@ public class LogRecordParser {
 		LogRecord logRecord = new LogRecord();
 		int requestStartIndex, requestEndIndex;
 		try {
-			logRecord.setHost(HostFieldParser.parse(tokens[0].substring(0,
-					tokens[0].indexOf(" "))));
-			logRecord.setTimestamp(timestampParser.parse(tokens[1]));
-			requestStartIndex = tokens[2].indexOf("\"") + 1;
-			requestEndIndex = tokens[2].lastIndexOf("\"");
-			fillRequestData(logRecord, tokens[2].substring(requestEndIndex));
-			fillRequest(logRecord,
-					tokens[2].substring(requestStartIndex, requestEndIndex));
-		} catch (ArrayIndexOutOfBoundsException e) {
-			logger.error("Error while parsing " + line);
-			return null;
+			if (tokens.length > 1) {
+				logRecord.setHost(HostFieldParser.parse(tokens[0].substring(0,
+						tokens[0].indexOf(" "))));
+				logRecord.setDate(TimestampParser.parse(tokens[1]));
+				requestStartIndex = tokens[2].indexOf("\"") + 1;
+				requestEndIndex = tokens[2].lastIndexOf("\"");
+				fillRequestData(logRecord, tokens[2].substring(requestEndIndex));
+				fillRequest(logRecord,
+						tokens[2].substring(requestStartIndex, requestEndIndex));
+			} else {
+				return null;
+			}
 		} catch (NumberFormatException e) {
-			logger.error("Error while parsing requestData " + line);
+			logger.error("Number " + line);
 			return null;
 		} catch (IllegalArgumentException e) {
-			logger.error("Error while parsing HttpMethod" + line);
+			logger.error("Argument " + line);
 			return null;
-		} catch (HttpVersionException e) {
-			logger.warn("Missing HTTP Version " + line);
-			logRecord.setHttpVersion("1.0");
-			return logRecord;
 		} catch (IndexOutOfBoundsException e) {
-			logger.error("Error while parsing " + line);
+			logger.error("IndexOutOf " + line);
 			return null;
 		}
 		return logRecord;
@@ -54,15 +49,14 @@ public class LogRecordParser {
 		return logRecord;
 	}
 
-	private static LogRecord fillRequest(LogRecord logRecord, String request)
-			throws HttpVersionException {
+	private static LogRecord fillRequest(LogRecord logRecord, String request) {
 		String[] tokens = request.split(" |\"");
 		logRecord.setHttpMethod(HttpMethodParser.parse(tokens[0]));
 		logRecord.setRequest(tokens[1]);
-		try {
+		if (tokens.length > 2) {
 			logRecord.setHttpVersion(HttpVersionParser.parse(tokens[2]));
-		} catch (ArrayIndexOutOfBoundsException e) {
-			throw new HttpVersionException(e);
+		} else {
+			logRecord.setHttpVersion("1.0");
 		}
 
 		return logRecord;
@@ -73,14 +67,6 @@ public class LogRecordParser {
 			return 0;
 		}
 		return Integer.parseInt(replyBytes);
-	}
-
-	public static String getTimestampFormat() {
-		return timestampParser.getTimestampFormatString();
-	}
-
-	public static void setTimestampFormat(String timestampFormat) {
-		timestampParser.setTimestampFormat(timestampFormat);
 	}
 
 }

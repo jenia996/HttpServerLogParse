@@ -10,9 +10,8 @@ import grsu.project.data.LogRecord;
 import grsu.project.report.Report;
 
 public class HttpMethodReport implements Report {
-	private Map<HttpMethod, Long> mostUsedMethod = new HashMap<>();
+	private Map<HttpMethod, Long> mostUsedMethod = new HashMap<HttpMethod, Long>();
 
-	@Override
 	public void addInfo(LogRecord logRecord) {
 		if (mostUsedMethod.containsKey(logRecord.getHttpMethod())) {
 			mostUsedMethod.put(logRecord.getHttpMethod(),
@@ -23,7 +22,6 @@ public class HttpMethodReport implements Report {
 
 	}
 
-	@Override
 	public String writeInfo() {
 		StringBuilder info = new StringBuilder();
 		long methodCount = getHttpMethodCount();

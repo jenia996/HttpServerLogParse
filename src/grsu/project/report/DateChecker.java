@@ -22,8 +22,8 @@ public class DateChecker {
 	public static Boolean checkDate(Date startDate, Date endDate,
 			LogRecord logRecord) {
 		try {
-			return checkStartDate(startDate, logRecord.getTimestamp())
-					&& checkEndDate(endDate, logRecord.getTimestamp());
+			return checkStartDate(startDate, logRecord.getDate())
+					&& checkEndDate(endDate, logRecord.getDate());
 		} catch (NullPointerException e) {
 			return true;
 		}

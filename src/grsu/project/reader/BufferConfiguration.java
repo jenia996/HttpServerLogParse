@@ -1,29 +1,25 @@
 package grsu.project.reader;
 
 public class BufferConfiguration {
-	private int partSize;
-	private int numberOfParts;
-	private int numberOfPartsWhenContinue;
+	private int bufferSize;
+	private int sizeWhenContinue;
 
 	public BufferConfiguration(int numberOfParts, int partSize) {
-		this.numberOfParts = numberOfParts;
-		this.partSize = partSize;
-		numberOfPartsWhenContinue = numberOfParts-numberOfParts/3;
+		this.bufferSize = partSize;
+		sizeWhenContinue = numberOfParts - numberOfParts / 3 - numberOfParts
+				/ 4;
 	}
 
 	public BufferConfiguration() {
-		this(10,5000);
+		this(60000, 40000);
 	}
 
-	public int getPartSize() {
-		return partSize;
-	}
 
-	public int getNumberOfParts() {
-		return numberOfParts;
+	public int getBufferSize() {
+		return bufferSize;
 	}
 
 	public boolean isAlmostEmpty(int currentNumberOfParts) {
-		return currentNumberOfParts <= numberOfPartsWhenContinue;
+		return currentNumberOfParts <= sizeWhenContinue;
 	}
 }

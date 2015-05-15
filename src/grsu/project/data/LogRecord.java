@@ -3,8 +3,9 @@ package grsu.project.data;
 import java.util.Date;
 
 public class LogRecord {
+
 	private HostField host;
-	private Date timestamp;
+	private Date date;
 	private String request;
 	private HttpMethod httpMethod;
 	private int replyCode;
@@ -19,20 +20,18 @@ public class LogRecord {
 		this.host = host;
 	}
 
-	public Date getTimestamp() {
-		return timestamp;
+	public Date getDate() {
+		return date;
 	}
 
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	@Override
 	public String toString() {
-		return  host + " " + timestamp
-				+ " " +   " " + httpMethod
-				+ " " + replyCode + " " + httpVersion
-				+ " " + replyBytes;
+		return host + " " + date + " " + " " + httpMethod + " "
+				+ replyCode + " " + httpVersion + " " + replyBytes;
 	}
 
 	public String getRequest() {

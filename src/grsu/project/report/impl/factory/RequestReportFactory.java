@@ -5,7 +5,6 @@ import grsu.project.report.impl.report.RequestReport;
 
 public class RequestReportFactory implements ReportFactory {
 
-	@Override
 	public RequestReport createReport() {
 		return new RequestReport();
 	}

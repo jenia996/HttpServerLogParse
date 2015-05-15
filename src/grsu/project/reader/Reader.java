@@ -26,7 +26,12 @@ public class Reader extends Thread {
 	}
 
 	public boolean isEmpty() {
-		return buffer.isEmpty();
+		try {
+			return buffer.isEmpty();
+		} catch (NullPointerException e) {
+			System.out.println("Empty");
+			return true;
+		}
 	}
 
 	public boolean isFullRead() {
@@ -67,12 +72,8 @@ public class Reader extends Thread {
 						while (buffer.isFull()) {
 							try {
 								monitor.setWaiting(true);
-								System.out.println("Second thread Wait"
-										+ buffer.getBufferSequnceSize());
 								if (ReportGenerator.isWaiting()) {
 									synchronized (ReportGenerator.getMonitor()) {
-										System.out
-												.println("SecondThread thread Notify Main thread");
 										ReportGenerator.getMonitor().notify();
 										ReportGenerator.setWaiting(false);
 									}

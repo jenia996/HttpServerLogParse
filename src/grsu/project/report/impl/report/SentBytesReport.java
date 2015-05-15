@@ -7,7 +7,6 @@ public class SentBytesReport implements Report {
 
 	private long sentBytes;
 
-	@Override
 	public void addInfo(LogRecord logRecord) {
 		this.sentBytes += logRecord.getReplyBytes();
 	}
